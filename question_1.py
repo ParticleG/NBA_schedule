@@ -19,8 +19,8 @@ if __name__ == '__main__':
                    '_total_home_games': 0,
                    '_total_visitor_wins': 0,
                    '_total_visitor_games': 0, } for i in range(30)]
-    first_year, second_year = load_data()
-    for index, row in first_year.iterrows():
+    raw_data = load_data("2019-2020.csv")
+    for index, row in raw_data.iterrows():
         group_list[row['Home']]['dates_of_games'].append(row['Date'])
         group_list[row['Home']]['is_won'].append(row['Winner'] == row['Home'])
         group_list[row['Home']]['is_host'].append(True)
@@ -36,7 +36,19 @@ if __name__ == '__main__':
         group_list[row['Visitor']]['_total_visitor_games'] += 1
 
     for group in group_list:
-        group['total_win_rate'] = group['_total_wins'] / first_year.shape[0]
+        group['total_win_rate'] = group['_total_wins'] / (group['_total_home_games'] + group['_total_visitor_games'])
         group['host_win_rate'] = group['_total_home_wins'] / group['_total_home_games']
         group['visitor_win_rate'] = group['_total_visitor_wins'] / group['_total_visitor_games']
-    print(group_list)
+
+        for i in range(len(group['dates_of_games'])):
+            if i == 0:
+                group['periods_between_games'].append(0)
+            else:
+                group['periods_between_games'].append(get_period(group['dates_of_games'][i], group['dates_of_games'][i - 1]).days)
+        group['average_period'] = np.sum(group['periods_between_games']) / len(group['periods_between_games'])
+
+        for i in range(len(group['is_host']) - 1):
+            if not group['is_host'][i] and not group['is_host'][i + 1]:
+                group['b2b_games'] += 1
+
+    save_to_csv(group_list, '2019-2020_processed.csv')
