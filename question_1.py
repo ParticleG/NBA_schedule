@@ -19,6 +19,7 @@ if __name__ == '__main__':
                    '_total_home_games': 0,
                    '_total_visitor_wins': 0,
                    '_total_visitor_games': 0, } for i in range(30)]
+    # raw_data = load_data("2018-2019.csv")
     raw_data = load_data("2019-2020.csv")
     for index, row in raw_data.iterrows():
         group_list[row['Home']]['dates_of_games'].append(row['Date'])
@@ -47,8 +48,10 @@ if __name__ == '__main__':
                 group['periods_between_games'].append(get_period(group['dates_of_games'][i], group['dates_of_games'][i - 1]).days)
         group['average_period'] = np.sum(group['periods_between_games']) / len(group['periods_between_games'])
 
-        for i in range(len(group['is_host']) - 1):
-            if not group['is_host'][i] and not group['is_host'][i + 1]:
-                group['b2b_games'] += 1
+        for i in range(len(group['periods_between_games'])):
+            if i != 0 and group['periods_between_games'][i] == 1:
+                if not group['is_host'][i] and not group['is_host'][i - 1]:
+                    group['b2b_games'] += 1
 
+    # save_to_csv(group_list, '2018-2019_processed.csv')
     save_to_csv(group_list, '2019-2020_processed.csv')
