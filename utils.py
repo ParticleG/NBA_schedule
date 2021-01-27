@@ -101,30 +101,31 @@ def save_specified_win_rate(group_list, filename):
     output_list = []
 
     for group in group_list:
-        if group['periods_between_games'] == 1:
-            if group['is_won']:
-                result_list[group['number']]['_win_count_1'] += 1
-            result_list[group['number']]['_game_count_1'] += 1
-        elif group['periods_between_games'] == 2:
-            if group['is_won']:
-                result_list[group['number']]['_win_count_2'] += 1
-            result_list[group['number']]['_game_count_2'] += 1
-        elif group['periods_between_games'] == 3:
-            if group['is_won']:
-                result_list[group['number']]['_win_count_3'] += 1
-            result_list[group['number']]['_game_count_3'] += 1
-        elif group['periods_between_games'] == 8:
-            if group['is_won']:
-                result_list[group['number']]['_win_count_8'] += 1
-            result_list[group['number']]['_game_count_8'] += 1
-        elif group['periods_between_games'] == 9:
-            if group['is_won']:
-                result_list[group['number']]['_win_count_9'] += 1
-            result_list[group['number']]['_game_count_9'] += 1
-        elif group['periods_between_games'] == 10:
-            if group['is_won']:
-                result_list[group['number']]['_win_count_10'] += 1
-            result_list[group['number']]['_game_count_10'] += 1
+        for i in range(len(group['periods_between_games'])):
+            if group['periods_between_games'][i] == 1:
+                if group['is_won'][i]:
+                    result_list[group['number']]['_win_count_1'] += 1
+                result_list[group['number']]['_game_count_1'] += 1
+            elif group['periods_between_games'][i] == 2:
+                if group['is_won'][i]:
+                    result_list[group['number']]['_win_count_2'] += 1
+                result_list[group['number']]['_game_count_2'] += 1
+            elif group['periods_between_games'][i] == 3:
+                if group['is_won'][i]:
+                    result_list[group['number']]['_win_count_3'] += 1
+                result_list[group['number']]['_game_count_3'] += 1
+            elif group['periods_between_games'][i] == 8:
+                if group['is_won'][i]:
+                    result_list[group['number']]['_win_count_8'] += 1
+                result_list[group['number']]['_game_count_8'] += 1
+            elif group['periods_between_games'][i] == 9:
+                if group['is_won'][i]:
+                    result_list[group['number']]['_win_count_9'] += 1
+                result_list[group['number']]['_game_count_9'] += 1
+            elif group['periods_between_games'][i] == 10:
+                if group['is_won'][i]:
+                    result_list[group['number']]['_win_count_10'] += 1
+                result_list[group['number']]['_game_count_10'] += 1
 
     for result in result_list:
         if result['_game_count_1'] == 0:
